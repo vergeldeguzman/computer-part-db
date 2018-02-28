@@ -1,0 +1,72 @@
+﻿<Window x:Class="ComputerPartsInventory.PartDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:ComputerPartsInventory"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner" 
+        Title="Computer Part" Height="300" Width="300">
+    <Window.Resources>
+        <x:Array x:Key="TypeItems" Type="sys:String">
+            <sys:String>Monitor</sys:String>
+            <sys:String>Keyboard</sys:String>
+            <sys:String>Mouse</sys:String>
+            <sys:String>Memory</sys:String>
+            <sys:String>Power supply</sys:String>
+            <sys:String>Motherboard</sys:String>
+            <sys:String>Video card</sys:String>
+            <sys:String>Storage drive</sys:String>
+            <sys:String>Other</sys:String>
+        </x:Array>
+
+        <x:Array x:Key="ConditionItems" Type="sys:String">
+            <sys:String>Good</sys:String>
+            <sys:String>Bad</sys:String>
+            <sys:String>Disposed</sys:String>
+            <sys:String>Unknown</sys:String>
+        </x:Array>
+    </Window.Resources>    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>            
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="lblDescription" Content="Description" Grid.Column="0" Grid.Row="0"/>
+        <TextBox x:Name="txtDescription" Margin="3" Grid.Column="1" Grid.Row="0"/>
+        
+        <Label x:Name="lblType" Content="Type" Grid.Column="0" Grid.Row="1"/>
+        <ComboBox x:Name="cmbType" Margin="3" Grid.Column="1" Grid.Row="1"
+                  ItemsSource="{StaticResource TypeItems}"/>
+        
+        <Label x:Name="lblPrice" Content="Price" Grid.Column="0" Grid.Row="2"/>
+        <TextBox x:Name="txtPrice" Margin="3" Grid.Column="1" Grid.Row="2"/>
+
+        <Label x:Name="lblLocation" Content="Location" Grid.Column="0" Grid.Row="3"/>
+        <TextBox x:Name="txtLocation" Margin="3" Grid.Column="1" Grid.Row="3"/>
+
+        <Label x:Name="lblCondition" Content="Condition" Grid.Column="0" Grid.Row="4"/>
+        <ComboBox x:Name="cmbCondition" Margin="3" Grid.Column="1" Grid.Row="4"
+                  ItemsSource="{StaticResource ConditionItems}"/>
+
+        <Label x:Name="lblRemarks" Content="Remarks" Grid.Column="0" Grid.Row="5"/>
+        <TextBox x:Name="txtRemarks" Margin="3" Grid.Column="1" Grid.Row="5"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right">
+            <Button IsDefault="True" Content="_OK" Width="60" Margin="3" Click="okButton_Click" />
+            <Button IsCancel="True" Content="_Cancel" Width="60" Margin="3" />
+        </StackPanel>
+    </Grid>
+</Window>
