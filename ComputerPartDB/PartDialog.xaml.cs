@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace ComputerPartsInventory
+namespace ComputerPartDb
 {
     /// <summary>
     /// Interaction logic for AddPartDialog.xaml
@@ -62,7 +62,8 @@ namespace ComputerPartsInventory
 
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Add validation on inputs
+            // TODO: Add validation rules on inputs.
+            //       For now, message box pops up on invalid inputs
             this.DialogResult = true;
         }
     }

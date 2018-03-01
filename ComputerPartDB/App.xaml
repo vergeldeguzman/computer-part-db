@@ -1,7 +1,7 @@
-﻿<Application x:Class="ComputerPartsInventory.App"
+﻿<Application x:Class="ComputerPartDb.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ComputerPartsInventory"
+             xmlns:local="clr-namespace:ComputerPartDb"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
