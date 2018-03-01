@@ -1,4 +1,4 @@
-﻿namespace ComputerPartsInventory
+﻿namespace ComputerPartDb
 {
     class PartDetail : Part
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace ComputerPartsInventory
+namespace ComputerPartDb
 {
     class Part : INotifyPropertyChanged
     {

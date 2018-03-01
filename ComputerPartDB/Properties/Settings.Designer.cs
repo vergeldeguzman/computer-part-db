@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ComputerPartsInventory.Properties
+namespace ComputerPartDb.Properties
 {
 
 
