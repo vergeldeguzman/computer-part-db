@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:ComputerPartDb"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner" 
-        Title="Computer Part" Height="300" Width="300">
+        Title="Computer Part" Height="350" Width="400">
     <Window.Resources>
         <x:Array x:Key="TypeItems" Type="sys:String">
             <sys:String>Monitor</sys:String>
@@ -27,6 +27,14 @@
             <sys:String>Disposed</sys:String>
             <sys:String>Unknown</sys:String>
         </x:Array>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="placeholder"/>
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+            </StackPanel>
+        </ControlTemplate>
+        
     </Window.Resources>    
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,32 +47,66 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>            
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
 
         <Label x:Name="lblDescription" Content="Description" Grid.Column="0" Grid.Row="0"/>
-        <TextBox x:Name="txtDescription" Margin="3" Grid.Column="1" Grid.Row="0"/>
+        <TextBox x:Name="txtDescription" Margin="3" Grid.Column="1" Grid.Row="0"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
+            <TextBox.Text>
+                <Binding Path="Description" Mode="TwoWay" ValidatesOnExceptions="True"
+                         UpdateSourceTrigger="LostFocus">
+                    <Binding.ValidationRules>
+                        <local:RequiredRule Name="Desciption" ValidatesOnTargetUpdated="True" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         
-        <Label x:Name="lblType" Content="Type" Grid.Column="0" Grid.Row="1"/>
-        <ComboBox x:Name="cmbType" Margin="3" Grid.Column="1" Grid.Row="1"
-                  ItemsSource="{StaticResource TypeItems}"/>
+        <Label Height="14" Grid.Column="1" Grid.Row="1"/>
+
+        <Label x:Name="lblType" Content="Type" Grid.Column="0" Grid.Row="2"/>
+        <ComboBox x:Name="cmbType" Margin="3" Grid.Column="1" Grid.Row="2"
+                  ItemsSource="{StaticResource TypeItems}"
+                  Text="{Binding PartType, Mode = TwoWay}"/>
+
+        <Label Height="14" Grid.Column="1" Grid.Row="3"/>        
         
-        <Label x:Name="lblPrice" Content="Price" Grid.Column="0" Grid.Row="2"/>
-        <TextBox x:Name="txtPrice" Margin="3" Grid.Column="1" Grid.Row="2"/>
+        <Label x:Name="lblPrice" Content="Price" Grid.Column="0" Grid.Row="4"/>
+        <TextBox x:Name="txtPrice" Margin="3" Grid.Column="1" Grid.Row="4"
+                 Text="{Binding Price, Mode = TwoWay}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}" />
 
-        <Label x:Name="lblLocation" Content="Location" Grid.Column="0" Grid.Row="3"/>
-        <TextBox x:Name="txtLocation" Margin="3" Grid.Column="1" Grid.Row="3"/>
+        <Label Height="14" Grid.Column="1" Grid.Row="5"/>        
 
-        <Label x:Name="lblCondition" Content="Condition" Grid.Column="0" Grid.Row="4"/>
-        <ComboBox x:Name="cmbCondition" Margin="3" Grid.Column="1" Grid.Row="4"
-                  ItemsSource="{StaticResource ConditionItems}"/>
+        <Label x:Name="lblLocation" Content="Location" Grid.Column="0" Grid.Row="6"/>
+        <TextBox x:Name="txtLocation" Margin="3" Grid.Column="1" Grid.Row="6"
+                 Text="{Binding Location, Mode = TwoWay}"/>
 
-        <Label x:Name="lblRemarks" Content="Remarks" Grid.Column="0" Grid.Row="5"/>
-        <TextBox x:Name="txtRemarks" Margin="3" Grid.Column="1" Grid.Row="5"/>
+        <Label Height="14" Grid.Column="1" Grid.Row="7"/>        
 
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right">
+        <Label x:Name="lblCondition" Content="Condition" Grid.Column="0" Grid.Row="8"/>
+        <ComboBox x:Name="cmbCondition" Margin="3" Grid.Column="1" Grid.Row="8"
+                  ItemsSource="{StaticResource ConditionItems}"
+                  Text="{Binding Condition, Mode = TwoWay}"/>
+
+        <Label Height="14" Grid.Column="1" Grid.Row="9"/>        
+
+        <Label x:Name="lblRemarks" Content="Remarks" Grid.Column="0" Grid.Row="10"/>
+        <TextBox x:Name="txtRemarks" Margin="3" Grid.Column="1" Grid.Row="10"
+                 Text="{Binding Remarks, Mode = TwoWay}"/>
+
+        <Label Height="14" Grid.Column="1" Grid.Row="11"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="12" HorizontalAlignment="Right">
             <Button IsDefault="True" Content="_OK" Width="60" Margin="3" Click="okButton_Click" />
             <Button IsCancel="True" Content="_Cancel" Width="60" Margin="3" />
         </StackPanel>

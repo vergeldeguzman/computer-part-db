@@ -14,7 +14,7 @@
 
         public int Add()
         {
-            return DbUtils.InsertPart(Description, Condition, PartType, Location, Price, Remarks);
+            return DbUtils.InsertPartDetail(Description, Condition, PartType, Location, Price, Remarks);
         }
         public void Read(int id)
         {

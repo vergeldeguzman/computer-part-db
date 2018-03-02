@@ -52,21 +52,21 @@ namespace ComputerPartDb
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    part.Description = reader.GetString(0);
-                    part.Condition = reader.GetString(1);
-                    part.PartType = reader.GetString(2);
-                    part.Location = reader.GetString(3);
-                    part.Price = reader.GetDecimal(4);
-                    part.Remarks = reader.GetString(5);
+                    part.Description = (reader.IsDBNull(0)) ? null: reader.GetString(0);
+                    part.Condition = (reader.IsDBNull(1)) ? null : reader.GetString(1);
+                    part.PartType = (reader.IsDBNull(2)) ? null : reader.GetString(2);
+                    part.Location = (reader.IsDBNull(3)) ? null : reader.GetString(3);
+                    part.Price = (reader.IsDBNull(4)) ? 0.0m : reader.GetDecimal(4);
+                    part.Remarks = (reader.IsDBNull(5)) ? null : reader.GetString(5);
                 }
             }
             return part;
         }
 
-        public static int InsertPart(string description, string condition, string partType,
+        public static int InsertPartDetail(string description, string condition, string partType,
             string location, decimal price, string remarks)
         {
-            // checks on required db fields
+            // checks on non-null db fields
             if (String.IsNullOrEmpty(description))
             {
                 throw new ArgumentException("Parameter cannot be null or empty", "description");
@@ -90,11 +90,11 @@ namespace ComputerPartDb
                     "OUTPUT INSERTED.ID " +
                     $"VALUES (@description,@condition,@partType,@location,{price},@remarks);";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", description);
-                command.Parameters.AddWithValue("@condition", condition);
-                command.Parameters.AddWithValue("@partType", partType);
-                command.Parameters.AddWithValue("@location", location);
-                command.Parameters.AddWithValue("@remarks", remarks);
+                command.Parameters.AddWithValue("@description", (description == null) ? (object)DBNull.Value : description);
+                command.Parameters.AddWithValue("@condition", (condition == null) ? (object)DBNull.Value : condition);
+                command.Parameters.AddWithValue("@partType", (partType == null) ? (object)DBNull.Value : partType);
+                command.Parameters.AddWithValue("@location", (location == null) ? (object)DBNull.Value : location);
+                command.Parameters.AddWithValue("@remarks", (remarks == null) ? (object)DBNull.Value : remarks);
 
                 connection.Open();
                 primaryKey = Convert.ToInt32(command.ExecuteScalar());
@@ -105,7 +105,7 @@ namespace ComputerPartDb
         public static void UpdatePart(int id, string description, string condition,
             string partType, string location, decimal price, string remarks)
         {
-            // checks on required db fields
+            // checks on non-null db fields
             if (String.IsNullOrEmpty(description))
             {
                 throw new ArgumentException("Parameter cannot be null or empty", "description");
@@ -133,11 +133,11 @@ namespace ComputerPartDb
                     $"Remarks=@remarks " +
                     $"WHERE id={id};";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", description);
-                command.Parameters.AddWithValue("@condition", condition);
-                command.Parameters.AddWithValue("@partType", partType);
-                command.Parameters.AddWithValue("@location", location);
-                command.Parameters.AddWithValue("@remarks", remarks);
+                command.Parameters.AddWithValue("@description", (description == null) ? (object)DBNull.Value : description);
+                command.Parameters.AddWithValue("@condition", (condition == null) ? (object)DBNull.Value : condition);
+                command.Parameters.AddWithValue("@partType", (partType == null) ? (object)DBNull.Value : partType);
+                command.Parameters.AddWithValue("@location", (location == null) ? (object)DBNull.Value : location);
+                command.Parameters.AddWithValue("@remarks", (remarks == null) ? (object)DBNull.Value : remarks);
 
                 connection.Open();
                 command.ExecuteNonQuery();

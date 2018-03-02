@@ -1,5 +1,5 @@
-﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ComputerPartDb
 {
@@ -11,60 +11,58 @@ namespace ComputerPartDb
         public PartDialog()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
-        public string Description
-        {
-            get { return txtDescription.Text; }
-            set { txtDescription.Text = value; }
-        }
+        public string Description { get; set; }
 
-        public string PartType
-        {
-            get { return cmbType.Text; }
-            set
-            {
-                 cmbType.Text = value;
-            }
-        }
+        public string PartType { get; set; } = "Other";
 
-        public decimal Price
-        {
-            get {
-                decimal priceInDecimal;
-                if (!Decimal.TryParse(txtPrice.Text, out priceInDecimal))
-                {
-                    // Price is optional so set 0 for unparseable price
-                    priceInDecimal = 0;
-                }
-                return priceInDecimal;
-            }
-            set { txtPrice.Text = value.ToString(); }
-        }
+        // implicit validation occurs because of user text to decimal conversion
+        public decimal Price { get; set; }
 
-        public string Location
-        {
-            get { return txtLocation.Text; }
-            set { txtLocation.Text = value; }
-        }
+        public string Location { get; set; }
 
-        public string Condition
-        {
-            get { return cmbCondition.Text; }
-            set { cmbCondition.Text = value; }
-        }
+        public string Condition { get; set; } = "Unknown";
 
-        public string Remarks
-        {
-            get { return txtRemarks.Text; }
-            set { txtRemarks.Text = value; }
-        }
+        public string Remarks { get; set; }
 
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Add validation rules on inputs.
-            //       For now, message box pops up on invalid inputs
-            this.DialogResult = true;
+            if (Validation.GetHasError(txtDescription) || Validation.GetHasError(txtPrice))
+            {
+                DialogResult = null;
+                return;
+            }
+
+            DialogResult = true;
+        }
+    }
+    public class RequiredRule : ValidationRule
+    {
+        public string Name { get; set; }
+
+        public int GridRow { get; set; }
+
+        public int GridColumn { get; set; }
+
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {            
+            string str = value as string;
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                return ValidationResult.ValidResult;
+            }
+            else
+            {
+                if (Name.Length == 0)
+                {
+                    Name = "Field";
+                }
+
+                return new ValidationResult(false, Name + " is required");
+            }
         }
     }
 }
