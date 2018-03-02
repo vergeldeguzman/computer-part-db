@@ -18,7 +18,7 @@ To delete a computer part, select an entry on the list and click the '-' icon. T
 
 ![](ComputerPartDB/images/remove.png)
  
-Areas for improvement
+## Areas for improvement
 - Search operation
 - Dialog input validation
 
