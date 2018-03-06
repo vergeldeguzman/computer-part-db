@@ -90,11 +90,11 @@ namespace ComputerPartDb
                     "OUTPUT INSERTED.ID " +
                     $"VALUES (@description,@condition,@partType,@location,{price},@remarks);";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", (description == null) ? (object)DBNull.Value : description);
-                command.Parameters.AddWithValue("@condition", (condition == null) ? (object)DBNull.Value : condition);
-                command.Parameters.AddWithValue("@partType", (partType == null) ? (object)DBNull.Value : partType);
-                command.Parameters.AddWithValue("@location", (location == null) ? (object)DBNull.Value : location);
-                command.Parameters.AddWithValue("@remarks", (remarks == null) ? (object)DBNull.Value : remarks);
+                command.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@condition", condition ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@partType", partType ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@location", location ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@remarks", remarks ?? (object)DBNull.Value);
 
                 connection.Open();
                 primaryKey = Convert.ToInt32(command.ExecuteScalar());
@@ -133,11 +133,11 @@ namespace ComputerPartDb
                     $"Remarks=@remarks " +
                     $"WHERE id={id};";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", (description == null) ? (object)DBNull.Value : description);
-                command.Parameters.AddWithValue("@condition", (condition == null) ? (object)DBNull.Value : condition);
-                command.Parameters.AddWithValue("@partType", (partType == null) ? (object)DBNull.Value : partType);
-                command.Parameters.AddWithValue("@location", (location == null) ? (object)DBNull.Value : location);
-                command.Parameters.AddWithValue("@remarks", (remarks == null) ? (object)DBNull.Value : remarks);
+                command.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@condition", condition ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@partType", partType ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@location", location ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@remarks", remarks ?? (object)DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();

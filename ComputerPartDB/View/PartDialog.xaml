@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ComputerPartDb"
+        xmlns:vm="clr-namespace:ComputerPartDb.ViewModel"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner" 
         Title="Computer Part" Height="350" Width="400">
@@ -60,17 +61,9 @@
 
         <Label x:Name="lblDescription" Content="Description" Grid.Column="0" Grid.Row="0"/>
         <TextBox x:Name="txtDescription" Margin="3" Grid.Column="1" Grid.Row="0"
-                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
-            <TextBox.Text>
-                <Binding Path="Description" Mode="TwoWay" ValidatesOnExceptions="True"
-                         UpdateSourceTrigger="LostFocus">
-                    <Binding.ValidationRules>
-                        <local:RequiredRule Name="Desciption" ValidatesOnTargetUpdated="True" />
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
-        
+                 Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+
         <Label Height="14" Grid.Column="1" Grid.Row="1"/>
 
         <Label x:Name="lblType" Content="Type" Grid.Column="0" Grid.Row="2"/>
@@ -107,7 +100,7 @@
         <Label Height="14" Grid.Column="1" Grid.Row="11"/>
 
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="12" HorizontalAlignment="Right">
-            <Button IsDefault="True" Content="_OK" Width="60" Margin="3" Click="okButton_Click" />
+            <Button IsDefault="True" Content="_OK" Width="60" Margin="3" Click="OkButton_Click" />
             <Button IsCancel="True" Content="_Cancel" Width="60" Margin="3" />
         </StackPanel>
     </Grid>
