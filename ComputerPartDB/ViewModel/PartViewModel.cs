@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ComputerPartDb.ViewModel
-{ 
+{
     class PartViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         public string Error => throw new NotImplementedException();
@@ -66,8 +62,8 @@ namespace ComputerPartDb.ViewModel
         }
 
         // Text bound to decimal has implicit validation
-        private decimal price;
-        public decimal Price
+        private decimal? price;
+        public decimal? Price
         {
             get { return price; }
             set

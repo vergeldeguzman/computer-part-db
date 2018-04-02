@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
+using System.Linq;
 
 namespace ComputerPartDb
 {
@@ -9,62 +8,45 @@ namespace ComputerPartDb
     {
         public static List<Part> SelectParts()
         {
-            List<Part> parts = new List<Part>();
-
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var db = new ComputerPartContext())
             {
-                string query = "SELECT Id, Description, Condition FROM ComputerPart;";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    Part part = new Part
+                var parts = db.ComputerParts
+                    .Select(c => new Part
                     {
-                        Id = reader.GetInt32(0),
-                        Description = reader.GetString(1),
-                        Condition = reader.GetString(2)
-                    };
-                    parts.Add(part);
-                }
+                        Id = c.Id,
+                        Description = c.Description,
+                        Condition = c.Condition
+                    });
+                return parts.ToList();
             }
-            return parts;
         }
 
         public static PartDetail SelectPartDetail(int id)
         {
-            PartDetail part = new PartDetail();
-
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var db = new ComputerPartContext())
             {
-                string query = 
-                    "SELECT Description,Condition,PartType,Location,Price,Remarks " +
-                    "FROM ComputerPart " +
-                    $"WHERE Id = {id};";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                var part = db.ComputerParts
+                    .Where(c => c.Id == id)
+                    .SingleOrDefault();
+                if (part != null)
                 {
-                    part.Description = (reader.IsDBNull(0)) ? null: reader.GetString(0);
-                    part.Condition = (reader.IsDBNull(1)) ? null : reader.GetString(1);
-                    part.PartType = (reader.IsDBNull(2)) ? null : reader.GetString(2);
-                    part.Location = (reader.IsDBNull(3)) ? null : reader.GetString(3);
-                    part.Price = (reader.IsDBNull(4)) ? 0.0m : reader.GetDecimal(4);
-                    part.Remarks = (reader.IsDBNull(5)) ? null : reader.GetString(5);
+                    return new PartDetail
+                    {
+                        Description = part.Description,
+                        Condition = part.Condition,
+                        PartType = part.PartType,
+                        Location = part.Location,
+                        Price = part.Price,
+                        Remarks = part.Remarks
+                    };
                 }
             }
-            return part;
+
+            return null;
         }
 
         public static int InsertPartDetail(string description, string condition, string partType,
-            string location, decimal price, string remarks)
+            string location, decimal? price, string remarks)
         {
             // checks on non-null db fields
             if (String.IsNullOrEmpty(description))
@@ -80,30 +62,27 @@ namespace ComputerPartDb
                 throw new ArgumentException("Parameter cannot be null or empty", "partType");
             }
 
-            int primaryKey = -1;
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            int id = -1;
+            using (var db = new ComputerPartContext())
             {
-                string query =
-                    "INSERT INTO ComputerPart (Description,Condition,PartType,Location,Price,Remarks) " +
-                    "OUTPUT INSERTED.ID " +
-                    $"VALUES (@description,@condition,@partType,@location,{price},@remarks);";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@condition", condition ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@partType", partType ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@location", location ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@remarks", remarks ?? (object)DBNull.Value);
-
-                connection.Open();
-                primaryKey = Convert.ToInt32(command.ExecuteScalar());
+                ComputerPart computerPart = new ComputerPart
+                {
+                    Description = description,
+                    Condition = condition,
+                    PartType = partType,
+                    Location = location,
+                    Price = price,
+                    Remarks = remarks
+                };
+                db.ComputerParts.Add(computerPart);
+                db.SaveChanges();
+                id = computerPart.Id;
             }
-            return primaryKey;
+            return id;
         }
 
         public static void UpdatePart(int id, string description, string condition,
-            string partType, string location, decimal price, string remarks)
+            string partType, string location, decimal? price, string remarks)
         {
             // checks on non-null db fields
             if (String.IsNullOrEmpty(description))
@@ -119,42 +98,30 @@ namespace ComputerPartDb
                 throw new ArgumentException("Parameter cannot be null or empty", "partType");
             }
 
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var db = new ComputerPartContext())
             {
-                string query =
-                    "UPDATE ComputerPart SET " +
-                    $"Description=@description," +
-                    $"Condition=@condition," +
-                    $"PartType=@partType," +
-                    $"Location=@location," +
-                    $"Price={price}," +
-                    $"Remarks=@remarks " +
-                    $"WHERE id={id};";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@condition", condition ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@partType", partType ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@location", location ?? (object)DBNull.Value);
-                command.Parameters.AddWithValue("@remarks", remarks ?? (object)DBNull.Value);
-
-                connection.Open();
-                command.ExecuteNonQuery();
+                var partToEdit = db.ComputerParts.Where(a => a.Id == id).SingleOrDefault();
+                if (partToEdit != null)
+                {
+                    partToEdit.Description = description;
+                    partToEdit.Condition = condition;
+                    partToEdit.PartType = partType;
+                    partToEdit.Location = location;
+                    partToEdit.Price = price;
+                    partToEdit.Remarks = remarks;
+                    db.SaveChanges();
+                }
             }
         }
 
         public static void DeletePart(int id)
         {
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var db = new ComputerPartContext())
             {
-                string query = $"DELETE FROM ComputerPart WHERE id = {id};";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                command.ExecuteNonQuery();
+                var computerPart = new ComputerPart { Id = 1 };
+                db.ComputerParts.Attach(computerPart);
+                db.ComputerParts.Remove(computerPart);
+                db.SaveChanges();
             }
         }
     }
