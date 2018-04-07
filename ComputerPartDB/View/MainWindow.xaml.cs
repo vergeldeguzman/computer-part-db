@@ -1,8 +1,8 @@
-﻿using ComputerPartDb.ViewModel;
+﻿using ComputerParstDb.ViewModel;
 using System;
 using System.Windows;
 
-namespace ComputerPartDb
+namespace ComputerParstDb
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -21,7 +21,7 @@ namespace ComputerPartDb
        
         private void EditPart_Click(object sender, RoutedEventArgs e)
         {
-            Part part = (Part)lvComputerParts.SelectedItem;
+            ComputerPart part = (ComputerPart)lvComputerParts.SelectedItem;
             if (part == null)
             {
                 // return if no selected item
@@ -85,7 +85,7 @@ namespace ComputerPartDb
             try
             {
                 MessageBoxResult result = MessageBox.Show(
-                    $"Are you sure you want to remove '{((Part)item).Description}'?",
+                    $"Are you sure you want to remove '{((ComputerPart)item).Description}'?",
                     "Remove Part", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {

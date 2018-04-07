@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Services.DTO;
+using Services.Interfaces;
+using Services.Providers;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ComputerPartDb.ViewModel
+namespace ComputerParstDb.ViewModel
 {
     class PartViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
@@ -114,8 +117,10 @@ namespace ComputerPartDb.ViewModel
 
         public void InitializeFields(int id)
         {
+            IComputerPartsService computerPartsService = new ComputerPartsService();
+
             // read part detail from db
-            PartDetail partDetail = DbUtils.SelectPartDetail(id);
+            ComputerPartDetailDTO partDetail = computerPartsService.GetDetailsById(id);
 
             // update dialog
             Description = partDetail.Description;
@@ -126,9 +131,9 @@ namespace ComputerPartDb.ViewModel
             Remarks = partDetail.Remarks;
         }
 
-        public PartDetail GetPartDetail()
+        public ComputerPartDetail GetPartDetail()
         {
-            return new PartDetail
+            return new ComputerPartDetail
             {
                 Description = this.Description,
                 PartType = this.PartType,

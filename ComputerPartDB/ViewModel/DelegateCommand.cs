@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace ComputerPartDb.ViewModel
+namespace ComputerParstDb.ViewModel
 {
     class DelegateCommand<T> : ICommand
     {
