@@ -1,4 +1,4 @@
-﻿namespace ComputerPartDb.ViewModel
+﻿namespace ComputerParstDb.ViewModel
 {
     interface ICloseable
     {

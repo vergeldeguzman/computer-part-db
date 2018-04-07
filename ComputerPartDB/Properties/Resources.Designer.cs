@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ComputerPartDb.Properties
+namespace ComputerParstDb.Properties
 {
 
 

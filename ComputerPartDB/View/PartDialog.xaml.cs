@@ -1,15 +1,15 @@
-using ComputerPartDb.ViewModel;
+using ComputerParstDb.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ComputerPartDb
+namespace ComputerParstDb
 {
     /// <summary>
     /// Interaction logic for AddPartDialog.xaml
     /// </summary>
     public partial class PartDialog : Window
     {
-        public PartDialog(Part part = null)
+        public PartDialog(ComputerPart part = null)
         {
             InitializeComponent();
             PartViewModel partViewModel = new PartViewModel();

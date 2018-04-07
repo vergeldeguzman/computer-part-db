@@ -1,16 +1,29 @@
-﻿using System;
+﻿using ComputerPartsInventory.Model;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Services.DTO;
+using Services.Interfaces;
+using Services.Providers;
 
-namespace ComputerPartDb.ViewModel
+namespace ComputerParstDb.ViewModel
 {
     class MainViewModel
     {
-        public ObservableCollection<Part> BoundedParts { get; private set; }
+        private IComputerPartsService computerPartsService;
+        public ObservableCollection<ComputerPart> BoundedParts { get; private set; }
         public DelegateCommand<ICloseable> ExitAppCommand { get; private set; }
 
         public MainViewModel()
         {
-            this.BoundedParts = new ObservableCollection<Part>(DbUtils.SelectParts());
+            this.computerPartsService = new ComputerPartsService();
+
+            List<ComputerPart> parts = new List<ComputerPart>();
+            foreach (var dto in computerPartsService.GetAll())
+            {
+                parts.Add(DTOConverter.ToComputerPart(dto));
+            }
+            this.BoundedParts = new ObservableCollection<ComputerPart>(parts);
 
             this.ExitAppCommand = new DelegateCommand<ICloseable>(this.CloseWindow, null);
         }
@@ -23,19 +36,13 @@ namespace ComputerPartDb.ViewModel
             }
         }
 
-        public void AddPart(PartDetail partDetail)
+        public void AddPart(ComputerPartDetail partDetail)
         {
             // update db
-            int id = DbUtils.InsertPartDetail(
-                partDetail.Description,
-                partDetail.Condition,
-                partDetail.PartType,
-                partDetail.Location,
-                partDetail.Price,
-                partDetail.Remarks);
+            int id = this.computerPartsService.Append(DTOConverter.FromComputerPartDetail(partDetail));
 
             // update list view
-            Part part = new Part
+            ComputerPart part = new ComputerPart
             {
                 Id = id,  // on selected item (ListView), the id is use for edit or delete db query
                 Description = partDetail.Description,
@@ -44,17 +51,10 @@ namespace ComputerPartDb.ViewModel
             BoundedParts.Add(part);
         }
 
-        public void EditPart(Part part, PartDetail partDetail)
+        public void EditPart(ComputerPart part, ComputerPartDetail partDetail)
         {
             // update db
-            DbUtils.UpdatePart(
-                part.Id,
-                partDetail.Description,
-                partDetail.Condition,
-                partDetail.PartType,
-                partDetail.Location,
-                partDetail.Price,
-                partDetail.Remarks);
+            this.computerPartsService.Update(part.Id, DTOConverter.FromComputerPartDetail(partDetail));
 
             // update list view, boundedParts are updated automatically
             part.Description = partDetail.Description;
@@ -63,13 +63,13 @@ namespace ComputerPartDb.ViewModel
 
         public void RemovePart(Object obj)
         {
-            Part part = (Part)obj;
+            ComputerPart part = (ComputerPart)obj;
 
             // remove from list view
             BoundedParts.Remove(part);
 
             // remove from db
-            DbUtils.DeletePart(part.Id);
+            this.computerPartsService.Delete(part.Id);
         }
     }
 }
