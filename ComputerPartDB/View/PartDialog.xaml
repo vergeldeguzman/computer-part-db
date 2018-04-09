@@ -3,39 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ComputerParstDb"
-        xmlns:vm="clr-namespace:ComputerParstDb.ViewModel"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner" 
         Title="Computer Part" Height="350" Width="400">
     <Window.Resources>
-        <x:Array x:Key="TypeItems" Type="sys:String">
-            <sys:String>Monitor</sys:String>
-            <sys:String>Keyboard</sys:String>
-            <sys:String>Mouse</sys:String>
-            <sys:String>Memory</sys:String>
-            <sys:String>Power supply</sys:String>
-            <sys:String>Motherboard</sys:String>
-            <sys:String>Video card</sys:String>
-            <sys:String>Storage drive</sys:String>
-            <sys:String>Other</sys:String>
-        </x:Array>
-
-        <x:Array x:Key="ConditionItems" Type="sys:String">
-            <sys:String>Good</sys:String>
-            <sys:String>Bad</sys:String>
-            <sys:String>Disposed</sys:String>
-            <sys:String>Unknown</sys:String>
-        </x:Array>
-
         <ControlTemplate x:Key="ErrorTemplate">
             <StackPanel>
                 <AdornedElementPlaceholder x:Name="placeholder"/>
                 <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
             </StackPanel>
         </ControlTemplate>
-        
     </Window.Resources>    
     <Grid>
         <Grid.ColumnDefinitions>

@@ -3,9 +3,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"        
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComputerParstDb"
-        xmlns:vm="clr-namespace:ComputerParstDb.ViewModel"
         mc:Ignorable="d"
         Title="Computer Part DB" Height="350" Width="525">
     <DockPanel LastChildFill ="True">
@@ -79,14 +80,56 @@ For MVVM:
 
                     <Image Source="/ComputerPartsInventory;component/Resources/Remove_16x.png"/>
                 </Button>
+                
+            </ToolBar>
+            <ToolBar Header="Filter by Type">
+                <ComboBox x:Name="cmbType" Margin="3" Grid.Column="1" Grid.Row="2"
+                          Text="{Binding PartType, Mode = TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <ComboBoxItem Content="All" ></ComboBoxItem>
+                            <CollectionContainer Collection="{Binding Source={StaticResource TypeItems}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                    <!--
+                        SelectionChanged event occurs before changing the propert
+                        https://stackoverflow.com/questions/2961118/combobox-selectionchanged-event-has-old-value-not-new-value
+                    -->
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="DropDownClosed">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="FilterBoundedParts"></ei:CallMethodAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+            </ToolBar>
+            <ToolBar Header="Filter by Condition">
+                <ComboBox x:Name="cmbCondition" Margin="3" Grid.Column="1" Grid.Row="2"
+                          Text="{Binding Condition, Mode = TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <ComboBoxItem Content="All" ></ComboBoxItem>
+                            <CollectionContainer Collection="{Binding Source={StaticResource ConditionItems}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                    <!--
+                        SelectionChanged event occurs before changing the propert
+                        https://stackoverflow.com/questions/2961118/combobox-selectionchanged-event-has-old-value-not-new-value
+                    -->
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="DropDownClosed">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="FilterBoundedParts"></ei:CallMethodAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
             </ToolBar>
         </ToolBarTray>
 
         <ListView x:Name="lvComputerParts" DockPanel.Dock="Top" ItemsSource="{Binding BoundedParts}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" Width="395" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" Width="295" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Condition}" Header="Condition" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=PartType}" Header="Type" Width="100"/>                    
                 </GridView>
             </ListView.View>
         </ListView>

@@ -40,16 +40,20 @@ namespace Services.Providers
             }
         }
 
-        public List<ComputerPartDTO> GetAll()
+        public List<ComputerPartDTO> GetComputerParts(string partType = null, string condition = null)
         {
             using (var db = new ComputerPartsContext())
             {
                 var parts = db.ComputerParts
+                    .Where(c =>
+                        (String.IsNullOrEmpty(partType) || c.PartType == partType) &&
+                        (String.IsNullOrEmpty(condition) || c.Condition == condition))
                     .Select(c => new ComputerPartDTO
                     {
                         Id = c.Id,
                         Description = c.Description,
-                        Condition = c.Condition
+                        Condition = c.Condition,
+                        PartType = c.PartType
                     });
                 return parts.ToList();
             }

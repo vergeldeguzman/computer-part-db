@@ -73,7 +73,7 @@ namespace ComputerParstDb
             }
         }
 
-        public void RemovePart_Click(object sender, RoutedEventArgs e)
+        private void RemovePart_Click(object sender, RoutedEventArgs e)
         {
             var item = lvComputerParts.SelectedItem;
             if (item == null)
