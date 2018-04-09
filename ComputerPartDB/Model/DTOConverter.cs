@@ -16,7 +16,8 @@ namespace ComputerPartsInventory.Model
             {
                 Id = dto.Id,
                 Description = dto.Description,
-                Condition = dto.Condition
+                Condition = dto.Condition,
+                PartType = dto.PartType
             };
         }
 

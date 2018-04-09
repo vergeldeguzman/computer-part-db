@@ -29,6 +29,17 @@ namespace ComputerParstDb
             }
         }
 
+        private string partType;
+        public string PartType
+        {
+            get { return partType; }
+            set
+            {
+                partType = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged([CallerMemberName] string propertName = null)
         {
