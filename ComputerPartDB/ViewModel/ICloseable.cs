@@ -1,6 +1,6 @@
 ﻿namespace ComputerParstDb.ViewModel
 {
-    interface ICloseable
+    public interface ICloseable
     {
         void Close();
     }

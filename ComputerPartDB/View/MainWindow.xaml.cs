@@ -1,4 +1,5 @@
 ﻿using ComputerParstDb.ViewModel;
+using Services.Providers;
 using System;
 using System.Windows;
 
@@ -12,7 +13,7 @@ namespace ComputerParstDb
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = new MainViewModel(new ComputerPartsService());
         }
 
         // TODO: Make Click event handlers to Command event handlers,

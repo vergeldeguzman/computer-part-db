@@ -44,7 +44,7 @@
 
         <Label Height="14" Grid.Column="1" Grid.Row="1"/>
 
-        <Label x:Name="lblType" Content="Type" Grid.Column="0" Grid.Row="2"/>
+        <Label x:Name="lblType" Content="PartType" Grid.Column="0" Grid.Row="2"/>
         <ComboBox x:Name="cmbType" Margin="3" Grid.Column="1" Grid.Row="2"
                   ItemsSource="{StaticResource TypeItems}"
                   Text="{Binding PartType, Mode = TwoWay}"/>
