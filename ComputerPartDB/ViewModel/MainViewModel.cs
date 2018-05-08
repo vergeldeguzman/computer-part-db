@@ -1,16 +1,13 @@
 ﻿using ComputerPartsInventory.Model;
 using Services.Interfaces;
-using Services.Providers;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace ComputerParstDb.ViewModel
 {
-    class MainViewModel
+    public class MainViewModel
     {
-        private IComputerPartsService computerPartsService;
+        private IComputerPartsService _computerPartsService;
         public ObservableCollection<ComputerPart> BoundedParts { get; private set; }
         public DelegateCommand<ICloseable> ExitAppCommand { get; private set; }
 
@@ -18,12 +15,12 @@ namespace ComputerParstDb.ViewModel
 
         public string Condition { get; set; } = "Good";
 
-        public MainViewModel()
+        public MainViewModel(IComputerPartsService computerPartsService)
         {
-            this.computerPartsService = new ComputerPartsService();
+            this._computerPartsService = computerPartsService;
 
             this.BoundedParts = new ObservableCollection<ComputerPart>();
-            this.FilterBoundedParts();
+            this.ReloadBoundedParts();
 
             this.ExitAppCommand = new DelegateCommand<ICloseable>(this.CloseWindow, null);
         }
@@ -39,32 +36,42 @@ namespace ComputerParstDb.ViewModel
         public void AddPart(ComputerPartDetail partDetail)
         {
             // update db
-            int id = this.computerPartsService.Append(DTOConverter.FromComputerPartDetail(partDetail));
+            int id = this._computerPartsService.Append(DTOConverter.FromComputerPartDetail(partDetail));
 
-            // update list view
-            ComputerPart part = new ComputerPart
+            // update list view if within Condition/Type filters
+            if ((Condition == "All" || Condition == partDetail.Condition) &&
+                (PartType == "All" || PartType == partDetail.PartType))
             {
-                Id = id,  // on selected item (ListView), the id is use for edit or delete db query
-                Description = partDetail.Description,
-                Condition = partDetail.Condition,
-                PartType = partDetail.PartType
-            };
-            this.BoundedParts.Add(part);
-
-            this.FilterBoundedParts();
+                ComputerPart part = new ComputerPart
+                {
+                    Id = id,  // on selected item (ListView), the id is use for edit or delete db query
+                    Description = partDetail.Description,
+                    Condition = partDetail.Condition,
+                    PartType = partDetail.PartType
+                };
+                this.BoundedParts.Add(part);
+            }
         }
 
         public void EditPart(ComputerPart part, ComputerPartDetail partDetail)
         {
             // update db
-            this.computerPartsService.Update(part.Id, DTOConverter.FromComputerPartDetail(partDetail));
+            this._computerPartsService.Update(part.Id, DTOConverter.FromComputerPartDetail(partDetail));
 
-            // update list view, boundedParts are updated automatically
-            part.Description = partDetail.Description;
-            part.Condition = partDetail.Condition;
-            part.PartType = partDetail.PartType;
-
-            this.FilterBoundedParts();
+            // update list view if within Condition/Type filters
+            if ((Condition == "All" || Condition == partDetail.Condition) &&
+                (PartType == "All" || PartType == partDetail.PartType))
+            {
+                // update list view, boundedParts are updated automatically
+                part.Description = partDetail.Description;
+                part.Condition = partDetail.Condition;
+                part.PartType = partDetail.PartType;
+            }
+            else
+            {
+                // otherwise, remove from list view
+                this.BoundedParts.Remove(part);
+            }
         }
 
         public void RemovePart(Object obj)
@@ -75,13 +82,13 @@ namespace ComputerParstDb.ViewModel
             this.BoundedParts.Remove(part);
 
             // remove from db
-            this.computerPartsService.Delete(part.Id);
+            this._computerPartsService.Delete(part.Id);
         }
 
-        public void FilterBoundedParts()
+        public void ReloadBoundedParts()
         {
             this.BoundedParts.Clear();
-            foreach (var dto in computerPartsService.GetComputerParts(
+            foreach (var dto in _computerPartsService.GetComputerParts(
                 PartType != "All" ? PartType : "",
                 Condition != "All" ? Condition : ""))
             {

@@ -97,7 +97,7 @@ For MVVM:
                     -->
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="DropDownClosed">
-                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="FilterBoundedParts"></ei:CallMethodAction>
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="ReloadBoundedParts"></ei:CallMethodAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -117,7 +117,7 @@ For MVVM:
                     -->
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="DropDownClosed">
-                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="FilterBoundedParts"></ei:CallMethodAction>
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="ReloadBoundedParts"></ei:CallMethodAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>

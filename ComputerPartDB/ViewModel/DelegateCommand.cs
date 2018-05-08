@@ -3,10 +3,10 @@ using System.Windows.Input;
 
 namespace ComputerParstDb.ViewModel
 {
-    class DelegateCommand<T> : ICommand
+    public class DelegateCommand<T> : ICommand
     {
-        Action<T> _execute;
-        Predicate<T> _canExecute;
+        public Action<T> _execute;
+        public Predicate<T> _canExecute;
         public event EventHandler CanExecuteChanged;
 
         public DelegateCommand(Action<T> execute, Predicate<T> canExecute)

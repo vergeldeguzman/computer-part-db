@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace ComputerParstDb.ViewModel
 {
-    class PartViewModel : INotifyPropertyChanged, IDataErrorInfo
+    public class PartViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         public string Error => throw new NotImplementedException();
         public string this[string columnName]
@@ -23,14 +23,14 @@ namespace ComputerParstDb.ViewModel
                             result = "Description is a mandatory field";
                         }
                         break;
-                    case "Type":
-                        if (String.IsNullOrEmpty(Description))
+                    case "PartType":
+                        if (String.IsNullOrEmpty(PartType))
                         {
                             result = "Type is a mandatory field";
                         }
                         break;
                     case "Condition":
-                        if (String.IsNullOrEmpty(Description))
+                        if (String.IsNullOrEmpty(Condition))
                         {
                             result = "Condition is a mandatory field";
                         }
